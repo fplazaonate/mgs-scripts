@@ -96,16 +96,16 @@ def extract_clusters_annotation(annotation_file, gene_to_clusters):
 
 
 def write_clusters_annotation(output_dir, clusters_annotation, min_cluster_size):
-	for cluster_name in clusters_annotation:
+	output_file = os.path.join(output_dir, 'clusters_annotation.txt')
 
-		if len(clusters_annotation[cluster_name]) < min_cluster_size :
-			continue
+	with open(output_file, 'w') as ostream:
+		for cluster_name in clusters_annotation:
 
-		output_file = os.path.join(output_dir, cluster_name + '.annotation.txt')
+			if len(clusters_annotation[cluster_name]) < min_cluster_size :
+				continue
 
-		with open(output_file, 'w') as ostream:
-			for line in clusters_annotation[cluster_name]:
-				print(line, file=ostream)
+			for annot in clusters_annotation[cluster_name]:
+				print('{0}\t{1}'.format(cluster_name, annot), file=ostream, end='')
 
 def main():
 	parameters = get_parameters()
