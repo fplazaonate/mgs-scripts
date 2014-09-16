@@ -1,10 +1,3 @@
-
-Connectivity <- function(prof, th=0.9){
-		data.cor <- rcorr(t(prof))$r
-		con <-colSums((data.cor>th)+0.0)
-		return(con)
-}
-
 plotBarcode <- function (data, main = "") {
 	cols <- list()
 		cols$val <- c(0, 0, 1e-07, 4e-07, 1.6e-06, 6.4e-06, 2.56e-05, 
@@ -15,7 +8,6 @@ plotBarcode <- function (data, main = "") {
 				axes = F, main = main)
 									  box()
 }
-
 
 args <- commandArgs(trailingOnly = TRUE)
 
@@ -43,15 +35,12 @@ if (!file.exists(output_dir))
 	stop(paste(output_dir, "does not exist."))
 }
 
-
 library(Cairo)
-library(Hmisc)
 
 cluster_name <- gsub("_profile.txt", "", basename(profile_file))
 output_file <- paste(output_dir, paste(cluster_name, 'png', sep='.'), sep="/")
 prof <- read.delim(profile_file)
-con <- Connectivity(prof)
-prof <- prof[order(con,decreasing=T),]
+prof <- prof[order(rowSums(prof)),]
 cat(output_file)
 CairoPNG(filename=output_file, width=1280,height=1024)
 plotBarcode(prof,main=paste(cluster_name, " , ", nrow(prof)," genes",sep=""))
