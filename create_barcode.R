@@ -40,7 +40,8 @@ library(Cairo)
 cluster_name <- gsub("_profile.txt", "", basename(profile_file))
 output_file <- paste(output_dir, paste(cluster_name, 'png', sep='.'), sep="/")
 prof <- read.delim(profile_file)
-prof <- prof[order(rowSums(prof)),]
+prof <- prof[order(rowSums(prof), decreasing=T),]
+#prof <- prof[order(rowSums(prof), decreasing=T),order(colSums(prof), decreasing=T)]
 cat(output_file)
 CairoPNG(filename=output_file, width=1280,height=1024)
 plotBarcode(prof,main=paste(cluster_name, " , ", nrow(prof)," genes",sep=""))
