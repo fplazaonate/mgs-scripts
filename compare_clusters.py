@@ -55,13 +55,23 @@ def get_parameters():
 
 	return parser.parse_args()
 
+def parse_clusters_file(istream):
+	cluster_name, gene_name = None, None
+
+	for line in istream:
+		if cluster_name:
+			yield cluster_name, gene_name
+		cluster_name, gene_name = line.split()
+	
+	if cluster_name:
+		yield cluster_name, gene_name
+
 def index_clusters(clusters_file, min_cluster_size=None):
 	gene_to_clusters = defaultdict(list)
 	cluster_to_genes = defaultdict(list)
 
 	with open(clusters_file, 'r') as istream:
-		for line in istream:
-			cluster_name, gene_name = line.split()
+		for cluster_name, gene_name in parse_clusters_file(istream):
 			gene_to_clusters[gene_name].append(cluster_name)
 			cluster_to_genes[cluster_name].append(gene_name)
 
