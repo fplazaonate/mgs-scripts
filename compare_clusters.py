@@ -96,13 +96,15 @@ def compare_clusters(gene_to_clusters_ref, cluster_to_genes_query):
 
 def write_results(clusters_query_to_clusters_ref, clusters_size_ref, clusters_size_query, output_file):
 	with open(output_file, 'w') as ostream:
-		for cluster_query in sorted(clusters_query_to_clusters_ref.keys(), key=lambda cluster_query: clusters_size_query[cluster_query], reverse=True):
+		for cluster_query, cluster_query_to_clusters_ref in sorted(clusters_query_to_clusters_ref.items(),
+				key=lambda (cluster_query,_): clusters_size_query[cluster_query], reverse=True):
 			print("{0} ({1} genes):".format(cluster_query, clusters_size_query[cluster_query]), file=ostream)
-			for cluster_ref in clusters_query_to_clusters_ref[cluster_query].iterkeys():
+			for cluster_ref in sorted(cluster_query_to_clusters_ref.keys(),
+					key = lambda cluster_ref: cluster_query_to_clusters_ref[cluster_ref], reverse=True):
 				if cluster_ref:
-					print("\t{0} ({1} genes)\t{2}".format(cluster_ref, clusters_size_ref[cluster_ref], clusters_query_to_clusters_ref[cluster_query][cluster_ref]), file=ostream)
+					print("\t{0} ({1} genes)\t{2}".format(cluster_ref, clusters_size_ref[cluster_ref], cluster_query_to_clusters_ref[cluster_ref]), file=ostream)
 				else:
-					print("\tunknown\t{0}".format(clusters_query_to_clusters_ref[cluster_query][cluster_ref]), file=ostream)
+					print("\tunknown\t{0}".format(cluster_query_to_clusters_ref[cluster_ref]), file=ostream)
 			print("", file=ostream)
 def main():
 	parameters = get_parameters()
