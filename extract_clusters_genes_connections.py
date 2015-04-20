@@ -112,7 +112,7 @@ def main():
 	genes_connections = parse_connections(parameters.genes_connections_file)
 	print('STEP 3/4: Dispatching genes connections...')
 	cluster_to_genes_connections = dispatch_connections(gene_to_cluster, genes_connections)
-	print('STEP 3/4: Writing results...')
+	print('STEP 4/4: Writing results...')
 	write_clusters_genes_connections(cluster_to_genes_connections, parameters.output_dir)
 
 if __name__ == '__main__':
