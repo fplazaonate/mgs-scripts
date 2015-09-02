@@ -6,6 +6,7 @@
 from __future__ import print_function
 import argparse
 import os
+from collections import defaultdict
 
 __author__ = "Florian Plaza Oñate"
 __copyright__ = "Copyright 2014, Enterome"
@@ -65,16 +66,12 @@ def parse_clusters(clusters_file):
 	""" Read the clusters file and creates a dict which map a gene to the list of its clusters.
 	"""
 
-	gene_to_clusters = dict()
+	gene_to_clusters = defaultdict(list)
 
 	with open(clusters_file, 'r') as istream:
 		for line in istream:
 			cluster_name, gene_name = line.split()
-
-			if gene_name in gene_to_clusters:
-				gene_to_clusters[gene_name].append(cluster_name)
-			else:
-				gene_to_clusters[gene_name] = [cluster_name]
+			gene_to_clusters[gene_name].append(cluster_name)
 	
 	return gene_to_clusters
 
@@ -82,7 +79,7 @@ def extract_clusters_profile(profiles_file, with_header, gene_to_clusters):
 	""" Read the profiles table and dispatch each gene profile to its clusters.
 	"""
 
-	clusters_profile = dict()
+	clusters_profile = defaultdict(list)
 
 	with open(profiles_file, 'r') as istream:
 		if with_header:
@@ -93,10 +90,7 @@ def extract_clusters_profile(profiles_file, with_header, gene_to_clusters):
 
 			if gene_name in gene_to_clusters:
 				for cluster_name in gene_to_clusters[gene_name]:
-					if cluster_name in clusters_profile:
-						clusters_profile[cluster_name].append(line)
-					else:
-						clusters_profile[cluster_name] = [line]
+					gene_to_clusters[gene_name].append(cluster_name)
 
 	return clusters_profile
 
