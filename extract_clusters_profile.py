@@ -90,7 +90,7 @@ def extract_clusters_profile(profiles_file, with_header, gene_to_clusters):
 
 			if gene_name in gene_to_clusters:
 				for cluster_name in gene_to_clusters[gene_name]:
-					gene_to_clusters[gene_name].append(cluster_name)
+					clusters_profile[cluster_name].append(line)
 
 	return clusters_profile
 
