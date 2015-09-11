@@ -48,7 +48,7 @@ library(Hmisc)
 
 cluster_name <- gsub("_profile.txt", "", basename(profile_file))
 output_file <- paste(output_dir, paste(cluster_name, 'png', sep='.'), sep="/")
-prof <- read.delim(profile_file)
+prof <- read.table(profile_file,header=F,row.names=1)
 con <- Connectivity(prof)
 prof <- prof[order(con,decreasing=T),]
 cat(output_file)
